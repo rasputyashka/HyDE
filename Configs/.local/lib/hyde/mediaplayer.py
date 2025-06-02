@@ -71,6 +71,7 @@ def create_tooltip_text(
 
     return tooltip
 
+
 def format_artist_track(artist, track, playing, max_length):
     # Use the appropriate prefix based on playback status
     prefix = prefix_playing if playing else prefix_paused
@@ -95,7 +96,9 @@ def format_artist_track(artist, track, playing, max_length):
             if len(track) != track[:track_limit]:
                 track = track[:track_limit].rstrip() + "…"
 
-        output_text = f"{prefix}{prefix_separator}<i>{artist}</i>{separator}<b>{track}</b>"
+        output_text = (
+            f"{prefix}{prefix_separator}<i>{artist}</i>{separator}<b>{track}</b>"
+        )
     else:
         output_text = "<b>Nothing playing</b>"
     return output_text
