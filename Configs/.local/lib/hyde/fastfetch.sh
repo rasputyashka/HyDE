@@ -51,7 +51,6 @@ logo) # eats around 13 ms
       [ -d "$HYDE_CACHE_HOME" ] && image_dirs+=("$HYDE_CACHE_HOME")
       [ -f "$hyde_distro_logo" ] && echo "${hyde_distro_logo}" # displays distro logo
       [ -f "$HOME/.face.icon" ] && image_dirs+=("$HOME/.face.icon")
-
       # .bash_logout matches *logo* in case image_dirs is an empty list
       if [[ ${image_dirs[@]} ]]; then
         print_images
