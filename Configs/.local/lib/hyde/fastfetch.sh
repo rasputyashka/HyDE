@@ -29,6 +29,7 @@ USAGE
 # Set the variables
 confDir="${XDG_CONFIG_HOME:-$HOME/.config}"
 iconDir="${XDG_DATA_HOME:-$HOME/.local/share}/icons"
+cacheDir="${XDG_CACHE_HOME:-$HOME/.cache}/hyde"
 image_dirs=()
 hyde_distro_logo=${iconDir}/Wallbash-Icon/distro/$LOGO
 
@@ -48,8 +49,10 @@ logo) # eats around 13 ms
       if [ -n "${HYDE_THEME}" ] && [ -d "${confDir}/hyde/themes/${HYDE_THEME}/logo" ]; then
         image_dirs+=("${confDir}/hyde/themes/${HYDE_THEME}/logo")
       fi
-      [ -d "$HYDE_CACHE_HOME" ] && image_dirs+=("$HYDE_CACHE_HOME")
-      [ -f "$hyde_distro_logo" ] && echo "${hyde_distro_logo}" # displays distro logo
+      # [ -d "$cacheDir" ] && image_dirs+=("$cacheDir")
+      [ -f "$hyde_distro_logo" ] && echo "${hyde_distro_logo}"
+      image_dirs+=("$cacheDir/wall.quad")
+      image_dirs+=("$cacheDir/wall.sqre")
       [ -f "$HOME/.face.icon" ] && image_dirs+=("$HOME/.face.icon")
 
       # .bash_logout matches *logo* in case image_dirs is an empty list
@@ -89,10 +92,10 @@ HELP
     for arg in "$@"; do
       case $arg in
       --quad)
-        image_dirs+=("$HYDE_CACHE_HOME/wall.quad")
+        image_dirs+=("$cacheDir/wall.quad")
         ;;
       --sqre)
-        image_dirs+=("$HYDE_CACHE_HOME/wall.sqre")
+        image_dirs+=("$cacheDir/wall.sqre")
         ;;
       --prof)
         [ -f "$HOME/.face.icon" ] && image_dirs+=("$HOME/.face.icon")
