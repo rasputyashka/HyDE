@@ -9,10 +9,10 @@ fi
 
 USAGE() {
   cat <<USAGE
-Usage: fastfetch [commands] [options]
+Usage: fastfetch.sh [commands] [options]
 
 commands:
-  logo    Display a random logo
+  logo    Returns path to the logo file.
 
 options:
   -h, --help,     Display command's help message
@@ -33,13 +33,19 @@ cacheDir="${XDG_CACHE_HOME:-$HOME/.cache}/hyde"
 image_dirs=()
 hyde_distro_logo=${iconDir}/Wallbash-Icon/distro/$LOGO
 
+function print_images() {
+  find -L "${image_dirs[@]}" -maxdepth 1 -type f \( -name "wall.quad" -o -name "wall.sqre" -o -name "*.icon" -o -name "*logo*" -o -name "*.png" \) ! -path "*/wall.set*" ! -path "*/wallpapers/*.png" 2>/dev/null
+
+}
+
 # Parse the main command
 case $1 in
 logo) # eats around 13 ms
   random() {
     (
       image_dirs+=("${confDir}/fastfetch/logo")
-      image_dirs+=("${iconDir}/Wallbash-Icon/fastfetch/")
+      image_dirs+=("${iconDir}/Wallbash-Icon/fastfetch/") # wallbash logos
+      # some themes has their own logo. Catppuccin Latte, for example.
       if [ -n "${HYDE_THEME}" ] && [ -d "${confDir}/hyde/themes/${HYDE_THEME}/logo" ]; then
         image_dirs+=("${confDir}/hyde/themes/${HYDE_THEME}/logo")
       fi
@@ -48,8 +54,11 @@ logo) # eats around 13 ms
       image_dirs+=("$cacheDir/wall.quad")
       image_dirs+=("$cacheDir/wall.sqre")
       [ -f "$HOME/.face.icon" ] && image_dirs+=("$HOME/.face.icon")
-      # also .bash_logout may be matched with this find
-      find -L "${image_dirs[@]}" -maxdepth 1 -type f \( -name "wall.quad" -o -name "wall.sqre" -o -name "*.icon" -o -name "*logo*" -o -name "*.png" \) ! -path "*/wall.set*" ! -path "*/wallpapers/*.png" 2>/dev/null
+
+      # .bash_logout matches *logo* in case image_dirs is an empty list
+      if [[ ${image_dirs[@]} ]]; then
+        print_images
+      fi
     ) | shuf -n 1
   }
   help() {
@@ -107,7 +116,7 @@ HELP
         ;;
       esac
     done
-    find -L "${image_dirs[@]}" -maxdepth 1 -type f \( -name "wall.quad" -o -name "wall.sqre" -o -name "*.icon" -o -name "*logo*" -o -name "*.png" \) ! -path "*/wall.set*" ! -path "*/wallpapers/*.png" 2>/dev/null
+    print_images
   ) | shuf -n 1
 
   ;;
